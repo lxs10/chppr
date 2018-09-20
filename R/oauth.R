@@ -41,3 +41,13 @@ split_url <- function(url) {
   }
   list(base = base, query = query)
 }
+
+oauth_encode <- function(x) {
+  encode <- function(x) {
+    x <- unlist(strsplit(as.character(x), ""))
+    bad <- grep("[^A-Za-z0-9_.~-]", x)
+    x[bad] <- sapply(x[bad], function(x) paste0("%", toupper(charToRaw(x))))
+    paste0(x, collapse = "")
+  }
+  sapply(x, encode)
+}
