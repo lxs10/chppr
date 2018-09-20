@@ -29,3 +29,15 @@ oauth_url <- function() {
     chppxml = "http://chpp.hattrick.org/chppxml.ashx"
   )
 }
+
+split_url <- function(url) {
+  url <- unlist(strsplit(url, "\\?"))
+  base <- url[1]
+  if (length(url) == 2) {
+    query <- strsplit(unlist(strsplit(url[2], "&")), "=")
+    query <- as.list(stats::setNames(sapply(query, `[`, 2), sapply(query, `[`, 1)))
+  } else {
+    query <- NULL
+  }
+  list(base = base, query = query)
+}
