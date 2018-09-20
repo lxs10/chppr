@@ -51,3 +51,39 @@ oauth_encode <- function(x) {
   }
   sapply(x, encode)
 }
+
+oauth_parameters <- function(url, consumer, callback, token, verifier) {
+  url <- split_url(url)
+  parameters <- list(
+    oauth_callback = callback,
+    oauth_consumer_key = consumer$key,
+    oauth_nonce = paste(sample(c(letters, LETTERS, 0:9), 10, TRUE), collapse = ""),
+    oauth_signature_method = "HMAC-SHA1",
+    oauth_timestamp = as.integer(Sys.time()),
+    oauth_token = token$token,
+    oauth_verifier = verifier,
+    oauth_version = "1.0"
+  )
+  parameters <- parameters[sapply(parameters, function(x) !is.null(x))]
+  string <- c(url$query, parameters)
+  string <- stats::setNames(oauth_encode(string), oauth_encode(names(string)))
+  string <- string[order(names(string))]
+  string <- paste0(names(string), "=", string, collapse = "&")
+  key <- paste0(oauth_encode(consumer$secret), "&", oauth_encode(token$secret))
+  string <- paste0("GET", "&", oauth_encode(url$base), "&", oauth_encode(string))
+  parameters$oauth_signature <- httr::hmac_sha1(key, string)
+  parameters[order(names(parameters))]
+}
+
+oauth_header <- function(url, consumer, callback = NULL, token = NULL,
+                         verifier = NULL) {
+  parameters <- oauth_parameters(url, consumer, callback, token, verifier)
+  authorization <- paste0(
+    "OAuth ",
+    paste0(
+      oauth_encode(names(parameters)), "=\"", oauth_encode(parameters), "\"",
+      collapse = ", "
+    )
+  )
+  httr::add_headers(Authorization = authorization)
+}
