@@ -2,5 +2,9 @@
 
 S3method(print,consumer)
 S3method(print,token)
+export(access_token)
+export(authorization_url)
+export(chppxml)
 export(consumer)
+export(request_token)
 export(token)

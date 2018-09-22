@@ -7,3 +7,6 @@ paste(sample(sort(c(LETTERS, letters, 0:9)), 43, TRUE), collapse = "")
 # token and token secret
 paste(sample(sort(c(LETTERS, letters, 0:9)), 16, TRUE), collapse = "")
 paste(sample(sort(c(LETTERS, letters, 0:9)), 16, TRUE), collapse = "")
+
+# verification code
+paste(sample(sort(c(LETTERS, letters, 0:9)), 16, TRUE), collapse = "")
