@@ -8,6 +8,7 @@ Imports:
     httr,
     xml2
 Suggests:
+    covr,
     rvest,
     testthat
 License: GPL-3 + file LICENSE
