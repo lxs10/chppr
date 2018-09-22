@@ -5,7 +5,8 @@ Authors@R: person("First", "Last", email = "first.last@example.com", role = c("a
 Description: Tools for developing CHPP products.
 Depends: R (>= 3.5.0)
 Imports:
-    httr
+    httr,
+    xml2
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

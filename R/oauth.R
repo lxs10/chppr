@@ -2,6 +2,11 @@ request_token <- function(consumer, callback = "oob") {
   url <- oauth_url()$request_token
   response <- httr::GET(url, oauth_header(url, consumer, callback = callback))
   content <- httr::content(response, "text", "text/html", "UTF-8")
+  if (response$status_code != 200) {
+    html <- xml2::read_html(content, "UTF-8")
+    title <- xml2::xml_text(xml2::xml_find_first(html, "head/title"))
+    stop(title)
+  }
   token <- sapply(strsplit(unlist(strsplit(content, "&"))[1:2], "="), `[`, 2)
   token(token[1], token[2])
 }
@@ -24,6 +29,11 @@ access_token <- function(consumer, request_token, verifier) {
   url <- oauth_url()$access_token
   response <- httr::GET(url, oauth_header(url, consumer, request_token, verifier))
   content <- httr::content(response, "text", "text/html", "UTF-8")
+  if (response$status_code != 200) {
+    html <- xml2::read_html(content, "UTF-8")
+    title <- xml2::xml_text(xml2::xml_find_first(html, "head/title"))
+    stop(title)
+  }
   token <- sapply(strsplit(unlist(strsplit(content, "&")), "="), `[`, 2)
   token(token[1], token[2])
 }
@@ -31,6 +41,12 @@ access_token <- function(consumer, request_token, verifier) {
 chppxml <- function(query, consumer, access_token) {
   url <- paste0(oauth_url()$chppxml, "?", query)
   response <- httr::GET(url, oauth_header(url, consumer, access_token))
+  if (response$status_code != 200) {
+    content <- httr::content(response, "text", "text/html", "UTF-8")
+    html <- xml2::read_html(content, "UTF-8")
+    title <- xml2::xml_text(xml2::xml_find_first(html, "head/title"))
+    stop(title)
+  }
   content <- httr::content(response, "text", "text/xml", "UTF-8")
   content
 }
