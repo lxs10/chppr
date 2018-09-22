@@ -4,6 +4,8 @@ Version: 0.0.0.9000
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
 Description: Tools for developing CHPP products.
 Depends: R (>= 3.5.0)
+Imports:
+    httr
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
